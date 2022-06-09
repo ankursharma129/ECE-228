@@ -1,0 +1,5 @@
+designs,synID,prediction,actual
+tinyRocket,103,0.29221207,0.43903795
+tinyRocket,30,0.29250595,1.1496873
+tinyRocket,976,0.29373515,0.93470097
+tinyRocket,820,0.2944339,-0.3731327
