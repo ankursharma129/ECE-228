@@ -1,4 +1,4 @@
-"# ECE-228" 
+# Synthesis QoR prediction
 
 For linear regression and neural network model: Run the .ipynb file from first cell to last
 
