@@ -8,5 +8,5 @@ For the GCN, I used the following environment:
 
 Once this environment is setup, you'll need to download the 19GB dataset from https://zenodo.org/record/6399454#.YqKJXnbMJmN
 
-Then you need to use the command: 
+Then you need to use the following command from the GCN directory: 
 `python train.py --lr 0.01 --lp 1 --epochs 10 --dataset set1 --rundir ./results/ --datadir "path to \OPENABC2_DATASET" --target delay`
