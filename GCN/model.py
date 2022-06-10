@@ -4,9 +4,14 @@ from torch_geometric.nn import global_mean_pool, global_max_pool
 import torch.nn.functional as F
 from torch_geometric.utils import add_self_loops, degree
 
+
+## Selecting specific synthesis features
 allowable_synthesis_features = {
     'synth_type' : [0,1,2,3,4,5,6]
 }
+
+
+## Get feature dimensions for GNN layers
 
 def get_synth_feature_dims():
     return list(map(len, [
@@ -30,13 +35,15 @@ def get_node_feature_dims():
 full_node_feature_dims = get_node_feature_dims()
 
 
+
+## Defining a class for Node encoder. This is used to instantiate a node in the GNN. Look at train.py file
 class NodeEncoder(torch.nn.Module):
 
     def __init__(self, emb_dim):
         super(NodeEncoder, self).__init__()
 
         self.node_type_embedding = torch.nn.Embedding(full_node_feature_dims[0], emb_dim)
-        torch.nn.init.xavier_uniform_(self.node_type_embedding.weight.data)
+        torch.nn.init.xavier_uniform_(self.node_type_embedding.weight.data) ## xavier uniform initialization for optimized convergence
 
     def forward(self, x):
         # First feature is node type, second feature is inverted predecessor
@@ -44,7 +51,7 @@ class NodeEncoder(torch.nn.Module):
         x_embedding = torch.cat((x_embedding, x[:,1].reshape(-1,1)), dim=1)
         return x_embedding
 
-
+## Defining the GCN model layer
 class GCNConv(MessagePassing):
     def __init__(self, in_emb_dim, out_emb_dim):
         super(GCNConv, self).__init__(aggr='add')
@@ -71,7 +78,7 @@ class GCNConv(MessagePassing):
     def update(self, aggr_out):
         return aggr_out
 
-
+## Defining each node of GNN. Performs convolution over the adjacency matrix
 class GNN_node(torch.nn.Module):
     """
     Output:
@@ -117,6 +124,8 @@ class GNN_node(torch.nn.Module):
 
         return h
 
+## GNN defines a gnn node in forward pass 
+
 class GNN(torch.nn.Module):
 
     def __init__(self, node_encoder, input_dim, num_layer = 2, emb_dim = 128,gnn_type = 'gcn',graph_pooling = "mean"):
@@ -136,6 +145,7 @@ class GNN(torch.nn.Module):
         return torch.cat([h_graph1,h_graph2],dim=1)
 
 
+## Creates the adjacency matrix encoding from the batch data
 class SynthFlowEncoder(torch.nn.Module):
     def __init__(self, emb_dim):
         super(SynthFlowEncoder, self).__init__()
@@ -148,7 +158,7 @@ class SynthFlowEncoder(torch.nn.Module):
             x_embedding = torch.cat((x_embedding, self.synth_emb(x[:, i])), dim=1)
         return x_embedding
 
-
+## convolutional layers for Synth Net
 class SynthConv(torch.nn.Module):
     def __init__(self, inp_channel=1,out_channel=3,ksize=6,stride_len=1):
         super(SynthConv, self).__init__()
@@ -160,6 +170,7 @@ class SynthConv(torch.nn.Module):
         return x.reshape(x.size(0),-1) # Convert [4,3,55] to [4,165]
 
 
+## Define the main synthesis network for the GNN
 class SynthNet(torch.nn.Module):
 
     def __init__(self, node_encoder, synth_encoder, n_classes, synth_input_dim, node_input_dim, gnn_embed_dim = 256,num_fc_layer=3, hidden_dim = 16):
