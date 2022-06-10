@@ -162,7 +162,7 @@ class SynthConv(torch.nn.Module):
 
 class SynthNet(torch.nn.Module):
 
-    def __init__(self, node_encoder, synth_encoder, n_classes, synth_input_dim, node_input_dim, gnn_embed_dim = 256,num_fc_layer=3, hidden_dim = 128):
+    def __init__(self, node_encoder, synth_encoder, n_classes, synth_input_dim, node_input_dim, gnn_embed_dim = 256,num_fc_layer=3, hidden_dim = 16):
         super(SynthNet,self).__init__()
         self.num_layers = num_fc_layer
         self.hidden_dim = hidden_dim
