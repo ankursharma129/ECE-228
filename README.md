@@ -13,3 +13,6 @@ Then you need to use the following command from the GCN directory:
 
 
 Note: A lot of the directory parsing and data reading code has been borrowed from OpenABC repository. This dataset processing is very specific and we were better off using the pytorch processing code that the author provided.
+
+
+Note: The Datapreprocessing folder has redundant files that don't have to be run
