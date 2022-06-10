@@ -10,3 +10,6 @@ Once this environment is setup, you'll need to download the 19GB dataset from ht
 
 Then you need to use the following command from the GCN directory: 
 `python train.py --lr 0.01 --lp 1 --epochs 10 --dataset set1 --rundir ./results/ --datadir "path to \OPENABC2_DATASET" --target delay`
+
+
+Note: A lot of the directory parsing and data reading code has been borrowed from OpenABC repository. This dataset processing is very specific and we were better off using the pytorch processing code that the author provided.
