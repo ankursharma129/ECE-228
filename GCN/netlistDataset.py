@@ -5,7 +5,7 @@ from zipfile import ZipFile
 import pandas as pd
 from torch_geometric.data import Dataset, download_url
 
-
+## Need this to unzip the .pt files and read the graph
 class NetlistGraphDataset(Dataset):
     def __init__(self, root, filePath, transform=None, pre_transform=None):
         self.filePath = osp.join(root, filePath)

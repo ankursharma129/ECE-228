@@ -150,7 +150,7 @@ class SynthFlowEncoder(torch.nn.Module):
     def __init__(self, emb_dim):
         super(SynthFlowEncoder, self).__init__()
         self.synth_emb = torch.nn.Embedding(full_synthesis_feature_dims[0], emb_dim)
-        torch.nn.init.xavier_uniform_(self.synth_emb.weight.data)
+        torch.nn.init.xavier_uniform_(self.synth_emb.weight.data)## xavier uniform initialization for optimized convergence
 
     def forward(self, x):
         x_embedding = self.synth_emb(x[:, 0])

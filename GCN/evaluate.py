@@ -18,6 +18,9 @@ import pickle
 import sys
 import matplotlib.pyplot as plt
 
+
+
+## defining various datasets
 datasetDict =  {
     'set1' : ["train_data_set1.csv","test_data_set1.csv"],
     'set2' : ["train_data_set2.csv","test_data_set2.csv"],
@@ -37,7 +40,7 @@ def plotChart(x,y,xlabel,ylabel,leg_label,title):
     plt.title(title,weight='bold')
     plt.savefig(osp.join(DUMP_DIR,title+'.png'), fmt='png', bbox_inches='tight')
 
-
+## plotting function for the model outputs
 def evaluate_plot(model, device, dataloader):
     model.eval()
     totalMSE = AverageMeter()
@@ -87,7 +90,7 @@ def main():
     synthEncodingDim = 3
 
     IS_STATS_AVAILABLE = True
-    ROOT_DIR = args.datadir  # '/scratch/abc586/OPENABC_DATASET'
+    ROOT_DIR = args.datadir
     global DUMP_DIR
     DUMP_DIR = args.rundir
     MODEL_PATH = osp.join(DUMP_DIR,MODEL_NAME)
@@ -103,6 +106,8 @@ def main():
         print("\nNo pickle file found for number of gates")
         exit(0)
 
+    ## lambda function didn't work here, so replaced with a function pointer
+
     meanVarTargetDict = computeMeanAndVarianceOfTargets(targetStats,targetVar=targetLbl)
 
     trainDS.transform = transforms.Compose([lambda data: addNormalizedTargets(data,targetStats,meanVarTargetDict,targetVar=targetLbl)])
@@ -117,6 +122,7 @@ def main():
     node_encoder = NodeEncoder(emb_dim=nodeEmbeddingDim)
     synthesis_encoder = SynthFlowEncoder(emb_dim=synthEncodingDim)
 
+    ## definition of actual model
     model = SynthNet(node_encoder=node_encoder,synth_encoder=synthesis_encoder,n_classes=num_classes,synth_input_dim=synthFlowEncodingDim,node_input_dim=nodeEmbeddingDim)
     model.load_state_dict(torch.load(MODEL_PATH))
     device = getDevice()

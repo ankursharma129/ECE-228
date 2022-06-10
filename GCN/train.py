@@ -23,6 +23,8 @@ datasetDict =  {
 }
 
 DUMP_DIR = None
+
+## Defining MSE loss
 criterion = torch.nn.MSELoss()
 
 def plotChart(x,y,xlabel,ylabel,leg_label,title):
@@ -51,6 +53,8 @@ def train(model,device,dataloader,optimizer):
         epochLoss.update(loss.detach().item(),numInputs)
     return epochLoss.avg
 
+
+# Call evaluate function
 def evaluate(model, device, dataloader):
     model.eval()
     validLoss = AverageMeter()
@@ -63,7 +67,7 @@ def evaluate(model, device, dataloader):
             numInputs = pred.view(-1,1).size(0)
             validLoss.update(mseVal,numInputs)
     return validLoss.avg
-
+## call plot function in evaluate
 def evaluate_plot(model, device, dataloader):
     model.eval()
     totalMSE = AverageMeter()
